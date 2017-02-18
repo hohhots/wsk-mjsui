@@ -4,3 +4,4 @@ libs
 dist
 .tmp
 app.yaml
+*.pyc

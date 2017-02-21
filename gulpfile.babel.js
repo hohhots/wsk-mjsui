@@ -19,7 +19,7 @@
 
 'use strict';
 
-// This gulpfile makes use of new JavaScript features.
+nn// This gulpfile makes use of new JavaScript features.
 // Babel handles this without us having to do anything. It just works.
 // You can read more about the new JavaScript features here:
 // https://babeljs.io/docs/learn-es2015/
@@ -175,6 +175,10 @@ gulp.task('serve', ['scripts', 'styles'], () => {
   gulp.watch(['app/styles/**/*.{scss,css}'], ['styles', reload]);
   gulp.watch(['app/scripts/**/*.js'], ['lint', 'scripts', reload]);
   gulp.watch(['app/images/**/*'], reload);
+
+    gulp.watch(['tests/**/*.{scss,css}'], ['styles', reload]);
+    gulp.watch(['tests/**/*.html'], reload);
+    gulp.watch(['tests/**/*.js'], ['lint', 'scripts', reload]);
 });
 
 // Build and serve the output from the dist build

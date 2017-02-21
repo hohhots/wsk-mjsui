@@ -30,15 +30,16 @@ define({
 	loaderOptions: {
 		// Packages that should be registered with the loader in each testing environment
 		packages: [
-			{ name: 'todo', location: 'js' }
+			{ name: 'todo', location: 'app/scripts' },
+			{ name: 'libs', location: 'libs' }
 		]
 	},
 
 	// Unit test suite(s) to run in each browser
-	suites: [ 'tests/utils' ],
+	suites: [ 'tests/mhtml' ],
 
 	// Functional test suite(s) to execute against each browser once unit tests are completed
-	functionalSuites: [ 'tests/functional/Todo' ],
+	/////functionalSuites: [ 'tests/functional/Todo' ],
 
 	// A regular expression matching URLs to files that should not be included in code coverage analysis. Set to `true`
 	// to completely disable code coverage.

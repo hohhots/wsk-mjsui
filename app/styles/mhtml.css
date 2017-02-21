@@ -1,0 +1,12 @@
+.mdiv {
+    margin: 0;
+    transform-origin: left top;
+		transform: rotate(-90deg) rotateY(180deg);
+    box-sizing: border-box;
+    border: 10px solid #aa0;
+}
+
+.mdiv-container {
+    padding: 0;
+    border: 1px solid #000;
+}

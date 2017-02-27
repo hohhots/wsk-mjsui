@@ -7,6 +7,7 @@
         },
 
         _minheight: 350,
+        _initMouseover: false,
         
         _create: function() {
             var self = this;
@@ -25,10 +26,16 @@
                 .append(html)
                 .appendTo(this.element);
 
+            this.element.css('transform-origin', 'left top');
+            this.element.css('transform', 'rotate(-90deg) rotateY(180deg)');
+            
             $(window).resize(function() {
                 self._resize();
             });
 
+            $(window).on('load', function() {
+                self._resize();
+            });
             
             this._resize();
             
@@ -39,8 +46,6 @@
         _setOption: function() {},
 
         _resize: function() {
-            this.element.css('transform-origin', 'left top');
-            this.element.css('transform', 'rotate(-90deg) rotateY(180deg)');
             
             var wheight = $(window).height();
             var innerwheight = wheight - parseInt($('body').css('margin-top')) - parseInt($('body').css('margin-bottom'));
@@ -63,7 +68,7 @@
         }
     });
 
-    $('.mongol').mhtml();    
+    $('.mongol').mhtml();
 })(jQuery);
 
 

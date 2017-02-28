@@ -52,10 +52,12 @@
 
             innerwheight = (wheight > this._minheight) ? innerwheight : this._minheight;
 
+            $('body').css('overflow-y', 'hidden');                
+
             this.element.outerWidth(innerwheight);
             
             var iw = this.element.outerWidth();
-                        
+            
             this._resizeContainer(iw, innerwheight);
 
         },
@@ -65,10 +67,11 @@
             this._container.css('width', iw);
             this._container.css('height', ih);
 
+
         }
     });
 
-    $('.mongol').mhtml();
+    //$('.mongol').mhtml();
 })(jQuery);
 
 

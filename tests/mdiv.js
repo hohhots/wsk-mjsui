@@ -16,8 +16,16 @@ define([
       assert.isFalse($('<span class="mongol"></span>').mdiv().hasClass('mdiv'), 'Only div html element\'s class \'mongol\' has effect!');
     },
 
-    'test nested divs are not allowed!': function() {
+    'test nested mongol divs are not allowed!': function() {
       assert.isFalse($('<div class="mongol"><div class="mongol"></div></div>').mdiv().hasClass('mdiv'));
+    },
+
+    'test insert div with \'mongol\' class into div which has \'mdiv\' class dont work.': function() {
+      assert.isTrue($('<div class="mdiv"><div class="mongol"></div></div>').mdiv().hasClass('mongol'));
+    },
+
+    'test wrap div with \'mdiv\' class into div which has \'mongol\' class dont work.': function() {
+      assert.isTrue($('<div class="mongol"><div class="mdiv"></div></div>').mdiv().hasClass('mongol'));
     },
     
     'test mdiv class': function(){

@@ -17,7 +17,7 @@
       if (this._detectMongolDivs()) {
         return;
       }
-              
+
       this.element.removeClass('mongol');
       this.element.addClass('mdiv');
 
@@ -74,27 +74,22 @@
     },
 
     _detectMongolDivs: function() {
-      var err = false,
-          mongols = $('.mongol'),
-          divs = mongols.filter("div");
-
-      // Only div can has class name 'mongol'
-      if (mongols.length != divs.length) {
-        console.error('Only DIV can have class name \'mongol\'!');
-
-        err = true;
+      if (!$(this.element).is('div')) {
+        // not allowed
+        return true;
       }
 
       // Nested divs each has same class 'mongol' are not allowed.
-      mongols.each(function() {
-        if($(this).find('.mongol').length != 0){
-          console.error('Don\'t nest DIVs with \'mongol\' class name.');
+      if ($(this.element).find('.mongol').is('div') ||
+          $(this.element).parent('.mongol').is('div')) {
+        console.error('Don\'t nest DIVs with \'mongol\' class name.');
 
-          err = true;
-        }
-      });
+        // not allowed.
+        return true;
+      }
 
-      return err;
+      // mdiv allowed
+      return false;
     }
   });
 

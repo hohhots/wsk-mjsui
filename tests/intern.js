@@ -36,7 +36,7 @@ define({
 	},
 
 	// Unit test suite(s) to run in each browser
-	suites: [ 'tests/mhtml' ],
+	suites: [ 'tests/mdiv' ],
 
 	// Functional test suite(s) to execute against each browser once unit tests are completed
 	/////functionalSuites: [ 'tests/functional/Todo' ],

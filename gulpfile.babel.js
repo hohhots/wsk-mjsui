@@ -39,10 +39,11 @@ const reload = browserSync.reload;
 
 // Lint JavaScript
 gulp.task('lint', () =>
-  gulp.src(['app/scripts/**/*.js','!node_modules/**'])
-    .pipe($.eslint())
-    .pipe($.eslint.format())
-    .pipe($.if(!browserSync.active, $.eslint.failAfterError()))
+          gulp.src(['app/scripts/**/*.js',
+                    '!node_modules/**'])
+          .pipe($.eslint())
+          .pipe($.eslint.format())
+          .pipe($.if(!browserSync.active, $.eslint.failAfterError()))
 );
 
 // Optimize images

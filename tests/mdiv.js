@@ -12,20 +12,29 @@ define([
       element = $('<div class="mongol"></div>').mdiv();
     },
 
-    'test only div\'s mongol class has effect': function() {
-      assert.isFalse($('<span class="mongol"></span>').mdiv().hasClass('mdiv'), 'Only div html element\'s class \'mongol\' has effect!');
+    'test is div': function() {
+       assert.isTrue($('<span class="mongol"></span>').
+                     mdiv().hasClass('mongol'), 'Only div html element\'s class \'mongol\' has effect!');
     },
 
-    'test nested mongol divs are not allowed!': function() {
-      assert.isFalse($('<div class="mongol"><div class="mongol"></div></div>').mdiv().hasClass('mdiv'));
+    'test wrap div of nested divs with mongol class': function() {
+      assert.isTrue($('<div class="mongol"><div class="mongol"></div></div>').
+                    first().mdiv().hasClass('mongol'), 'Can\'t nest divs with mongol class.');
     },
 
-    'test insert div with \'mongol\' class into div which has \'mdiv\' class dont work.': function() {
-      assert.isTrue($('<div class="mdiv"><div class="mongol"></div></div>').mdiv().hasClass('mongol'));
+    'test wrapped div of nested divs with mongol class': function() {
+      assert.isTrue($('<div class="mongol"><div class="mongol"></div></div>').
+                    find('.mongol').mdiv().hasClass('mongol'), 'Can\'t nest divs with mongol class.');
+    },
+    
+    'test nested divs that mongol in mdiv.': function() {
+       assert.isTrue($('<div class="mdiv"><div class="mongol"></div></div>').
+                     find('.mongol').mdiv().hasClass('mongol'), 'Can\'t insert mongol div into mdiv div.');
     },
 
     'test wrap div with \'mdiv\' class into div which has \'mongol\' class dont work.': function() {
-      assert.isTrue($('<div class="mongol"><div class="mdiv"></div></div>').mdiv().hasClass('mongol'));
+       assert.isTrue($('<div class="mongol"><div class="mdiv"></div></div>').
+                     first().mdiv().hasClass('mongol'));
     },
     
     'test mdiv class': function(){

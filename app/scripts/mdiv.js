@@ -59,7 +59,7 @@
       innerwheight = (wheight > this._minheight) ?
         innerwheight : this._minheight;
 
-      $('body').css('overflow-y', 'hidden');
+      //$('body').css('overflow-y', 'hidden');
 
       this.element.outerWidth(innerwheight);
 
@@ -74,15 +74,19 @@
     },
 
     _detectMongolDivs: function() {
+
+      // Only div can has class 'mongol'
       if (!$(this.element).is('div')) {
+        console.log('Only div element can has \'mongol\' class.');
+
         // not allowed
         return true;
       }
-
+      
       // Nested divs each has same class 'mongol' are not allowed.
-      if ($(this.element).find('.mongol').is('div') ||
-          $(this.element).parent('.mongol').is('div')) {
-        console.error('Don\'t nest DIVs with \'mongol\' class name.');
+      if ($(this.element).find('.mongol, .mdiv').is('div') ||
+          $(this.element).parents('.mongol, .mdiv').is('div')) {
+        console.error('Don\'t nest DIVs with \'mongol\' class or \'mdiv\' class.');
 
         // not allowed.
         return true;

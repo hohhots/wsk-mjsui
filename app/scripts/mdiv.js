@@ -3,18 +3,15 @@
     version: '@VERSION',
 
     options: {
+      _minheight: 350,
       height: 0,
       width: 0
     },
 
-    _minheight: 350,
-
-    _initMouseover: false,
-
     _create: function() {
       var self = this;
 
-      if (this._detectMongolDivs()) {
+      if (this._checkMongolDivs()) {
         return;
       }
 
@@ -51,20 +48,32 @@
     _setOption: function() {},
 
     _resize: function() {
-      var wheight = $(window).height();
-      var innerwheight = wheight -
-          parseInt($('body').css('margin-top'), 10) -
-          parseInt($('body').css('margin-bottom'), 10);
-
-      innerwheight = (wheight > this._minheight) ?
-        innerwheight : this._minheight;
-
+      
       //$('body').css('overflow-y', 'hidden');
 
+      var wheight = 0;
+      var innerwheight = 0;
+      // Check if in other div
+      var parDiv = this._container.parents('div');
+      if (parDiv.length > 0) {
+        wheight = parDiv.first().innerHeight();
+        innerwheight = wheight;
+        
+      }else{
+        wheight = $(window).height();
+
+        innerwheight = wheight -
+          parseInt($('body').css('margin-top'), 10) -
+          parseInt($('body').css('margin-bottom'), 10);
+        
+        innerwheight = (wheight > this.options._minheight) ?
+          innerwheight : this.options._minheight;
+      }
+      
       this.element.outerWidth(innerwheight);
 
       var iw = this.element.outerWidth();
-
+      
       this._resizeContainer(iw, innerwheight);
     },
 
@@ -73,19 +82,19 @@
       this._container.css('height', ih);
     },
 
-    _detectMongolDivs: function() {
+    _checkMongolDivs: function() {
 
       // Only div can has class 'mongol'
-      if (!$(this.element).is('div')) {
-        console.log('Only div element can has \'mongol\' class.');
+      if (!this.element.is('div')) {
+        console.error('Only div element can has \'mongol\' class.');
 
         // not allowed
         return true;
       }
       
       // Nested divs each has same class 'mongol' are not allowed.
-      if ($(this.element).find('.mongol, .mdiv').is('div') ||
-          $(this.element).parents('.mongol, .mdiv').is('div')) {
+      if (this.element.find('.mongol, .mdiv').is('div') ||
+          this.element.parents('.mongol, .mdiv').is('div')) {
         console.error('Don\'t nest DIVs with \'mongol\' class or \'mdiv\' class.');
 
         // not allowed.

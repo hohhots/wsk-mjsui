@@ -22,7 +22,7 @@ define([
     },
 
     'test _container div height in window': function() {
-      assert.equal(element.outerWidth(), element.parent('div').first().innerHeight());
+      assert.equal(element.css('width'), element.parent('div.mdiv-container').innerWidth()+ 'px');
     }
 	});
   

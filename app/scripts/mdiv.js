@@ -1,7 +1,9 @@
 (function(window, $) {
   $.widget('mongol.mdiv', {
     version: '@VERSION',
-
+    _elClassName: 'mdiv',
+    _containerClassName: 'mdiv-container',
+    
     options: {
       _minheight: 350,
       height: -1
@@ -14,12 +16,10 @@
         return;
       }
 
-      this.element.removeClass('mongol');
-      this.element.addClass('mdiv');
+      resetSelfClass(self);
 
-      this._container = $('<div class="mdiv-container"></div>');
-      this._container.insertAfter(this.element);
-      this._container.append(this.element);
+      this.element.wrap('<div class="' + this._containerClassName + '"></div>');
+      this._container = this.element.parent('div.' + this._containerClassName);
 
       var html = this.element.html();
       this.element.empty();
@@ -57,6 +57,17 @@
     }
   });
 
+  function resetSelfClass(self) {
+    var cl = (self._elClassName + ' ' +
+              self.element.prop('class')
+              .replace(/mongol/gi, '')
+              .replace(/\s{2,}/g, ' ')
+             ).trim();
+    
+    self.element.prop('class', cl);
+  }
+
+
   function checkMongolDivs(self) {
     var el = self.element;
     // Only div can has class 'mongol'
@@ -68,9 +79,9 @@
     }
 
     // Nested divs each has same class 'mongol' are not allowed.
-    if (el.find('.mongol, .mdiv').is('div') ||
-        el.parents('.mongol, .mdiv').is('div')) {
-      console.error('Don\'t nest DIVs with \'mongol\' class or \'mdiv\' class.');
+    if (el.find('.mongol, .' + self._elClassName).is('div') ||
+        el.parents('.mongol, .' + self._elClassName).is('div')) {
+      console.error('Don\'t nest DIVs with \'mongol\' class or \'' + self._elClassName + '\' class.');
 
       // not allowed.
       return true;
@@ -122,5 +133,6 @@
       setElementSize(self);
     });
   }
-  // $('.mongol').mdiv();
+
+  // $('div.mongol').mdiv();
 })(window, jQuery);

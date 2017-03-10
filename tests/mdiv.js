@@ -5,6 +5,9 @@ define([
   'intern/order!libs/jquery-ui',
   'intern/order!todo/mdiv'
 ], function (registerSuite, assert) {
+  var elClassName = 'mdiv',
+      containerClassName = 'mdiv-container';  
+  
 	registerSuite({
 		name: 'mongol div in window',
 
@@ -13,7 +16,7 @@ define([
     },
 
     'test mdiv class': function(){
-      assert.isTrue(element.hasClass('mdiv'), 'Make sure after build the DIV which has corresponding class will has correct changed class name.');
+      assert.isTrue(element.hasClass(elClassName), 'Make sure after build the DIV which has corresponding class will has correct changed class name.');
     },
 
     'test div height in window': function() {
@@ -22,7 +25,7 @@ define([
     },
 
     'test _container div height in window': function() {
-      assert.equal(element.css('width'), element.parent('div.mdiv-container').innerWidth()+ 'px');
+      assert.equal(element.css('width'), element.parent('div.' + containerClassName).innerWidth()+ 'px');
     }
 	});
 
@@ -45,18 +48,18 @@ define([
     },
 
     'test mdiv divs wrap mongol mdiv.': function() {
-      assert.isTrue($('<div class="mdiv"><div class="mongol"></div></div>').
+      assert.isTrue($('<div class="' + elClassName + '"><div class="mongol"></div></div>').
                     children('.mongol').mdiv().hasClass('mongol'), 'Can\'t insert mongol div into mdiv div.');
     },
 
     'test mongol div wrap mdiv div.': function() {
-      assert.isTrue($('<div class="mongol"><div class="mdiv"></div></div>').
-                    first().mdiv().hasClass('mongol'), 'mongol div can\'t wrap other div with mdiv class');
+      assert.isTrue($('<div class="mongol"><div class="' + elClassName + '"></div></div>').
+                    first().mdiv().hasClass('mongol'), 'mongol div can\'t wrap other div with ' + elClassName + ' class');
     },
 
     'test wrap mongol div correct.': function() {
       assert.isTrue($('<div><div class="mongol"></div></div>').
-                    children('.mongol').mdiv().hasClass('mdiv'), 'mongol div can used in other div which is not mongol or mdiv class div');
+                    children('.mongol').mdiv().hasClass(elClassName), 'mongol div can used in other div which is not mongol or ' + elClassName + ' class div');
     },
 
     'test mongol div width in other div.': function() {
@@ -66,5 +69,33 @@ define([
     }
 
 
+  });
+
+  registerSuite({
+		name: 'mongol div with class in window',
+
+    setup: function() {
+      el = $('<div class="mongol"></div>').mdiv();
+      el1 = $('<div class="my mongol my1"></div>').mdiv();
+      el2 = $('<div class="my mongol my1 Mongol"></div>').mdiv();
+    },
+
+    'test "mongol" class replaced by "mdiv"': function() {
+      assert.isFalse(el.hasClass('mongol'));
+      assert.isFalse(el1.hasClass('mongol'));
+      assert.isFalse(el2.hasClass('mongol'));
+    },
+    
+    'test origin not mongol class exist.': function() {
+      assert.isTrue(el.hasClass(elClassName));
+      assert.isTrue(el1.hasClass(elClassName + ' my my1'));
+      assert.isTrue(el2.hasClass(elClassName + ' my my1'));
+    },
+
+    'test set class mdiv to head.': function() {
+      assert.equal(el.prop('class'), elClassName);
+      assert.equal(el1.prop('class'), elClassName + ' my my1');
+      assert.equal(el2.prop('class'), elClassName + ' my my1');
+    }
   });
 })

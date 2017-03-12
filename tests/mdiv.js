@@ -6,7 +6,17 @@ define([
   'intern/order!todo/mdiv'
 ], function (registerSuite, assert) {
   var elClassName = 'mdiv',
-      containerClassName = 'mdiv-container';  
+      containerClassName = 'mdiv-container',
+      mongolClassName = 'mongol';  
+
+  registerSuite({
+    name: 'mongol div definition',
+
+    'test is div': function() {
+      assert.isTrue($('<span class="mongol"></span>').
+                    mdiv().hasClass('mongol'), 'Only div html element\'s class \'mongol\' has effect!');
+    }
+  });
   
 	registerSuite({
 		name: 'mongol div in window',
@@ -31,11 +41,6 @@ define([
 
   registerSuite({
     name: 'mongol div in other div',
-
-    'test is div': function() {
-      assert.isTrue($('<span class="mongol"></span>').
-                    mdiv().hasClass('mongol'), 'Only div html element\'s class \'mongol\' has effect!');
-    },
 
     'test wrap div of nested divs with mongol class': function() {
       assert.isTrue($('<div class="mongol"><div class="mongol"></div></div>').

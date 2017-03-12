@@ -3,6 +3,8 @@
     version: '@VERSION',
     _elClassName: 'mdiv',
     _containerClassName: 'mdiv-container',
+    _container: null,
+    _containerParent: null,
     
     options: {
       _minheight: 350,
@@ -16,21 +18,16 @@
         return;
       }
 
-      resetSelfClass(self);
+      setClass(self);
 
-      this.element.wrap('<div class="' + this._containerClassName + '"></div>');
-      this._container = this.element.parent('div.' + this._containerClassName);
+      setInnerHtml(self);
 
-      var html = this.element.html();
-      this.element.empty();
+      rotateElement(self);
+     
+      setContainer(self);
 
-      $('<span class="mongolfont"></span')
-        .append(html)
-        .appendTo(this.element);
-
-      this.element.css('transform-origin', 'left top');
-      this.element.css('transform', 'rotate(-90deg) rotateY(180deg)');
-
+      setContainerParent(self);
+      
       setElementSize(self);
 
       setEvents(self);
@@ -57,7 +54,7 @@
     }
   });
 
-  function resetSelfClass(self) {
+  function setClass(self) {
     var cl = (self._elClassName + ' ' +
               self.element.prop('class')
               .replace(/mongol/gi, '')
@@ -67,6 +64,20 @@
     self.element.prop('class', cl);
   }
 
+  function setInnerHtml(self) {
+    var html = self.element.html();
+    self.element.empty();
+
+    $('<span class="mongolfont"></span')
+      .append(html)
+      .appendTo(self.element);
+  }
+
+  function rotateElement(self) {
+    self.element.css('transform-origin', 'left top');
+    self.element.css('transform', 'rotate(-90deg) rotateY(180deg)');
+
+  }
 
   function checkMongolDivs(self) {
     var el = self.element;
@@ -92,17 +103,13 @@
   }
 
   function setElementSize(self) {
-    var innerwheight;
-    // Check if in other div or window
-    var parDiv = self._container.parents('div');
-    if (parDiv.length) {
-      innerwheight = parDiv.first().innerHeight();
-    } else {
-      var wheight = $(window).height();
+    var innerwheight = self._containerParent.innerHeight();
 
-      innerwheight = wheight -
+    if (!containerParentIsDiv(self)) {
+      innerwheight = innerwheight -
         parseInt($('body').css('margin-top'), 10) -
         parseInt($('body').css('margin-bottom'), 10);
+
       if (innerwheight < self.options._minheight) {
         innerwheight = self.options._minheight;
       }
@@ -113,6 +120,29 @@
     });
   }
 
+  function setContainer(self) {
+    self.element.wrap('<div class="' + self._containerClassName + '"></div>');
+    self._container = self.element.parent('div.' + self._containerClassName);
+  }
+
+  function setContainerParent(self) {
+    var parDiv = self._container.parents('div').first();
+
+    if (parDiv.length) {
+      self._containerParent = parDiv;
+    } else {
+      self._containerParent = $(window);
+    }
+  }
+
+  function containerParentIsDiv(self) {
+    if (self._containerParent &&
+        self._containerParent.is('div')) {
+      return true;
+    }
+    return false;
+  }
+  
   function setSelfHeight(height, self) {
     self.element.outerWidth(height);
 
@@ -132,6 +162,8 @@
     $(window).on('load', function() {
       setElementSize(self);
     });
+
+    
   }
 
   // $('div.mongol').mdiv();

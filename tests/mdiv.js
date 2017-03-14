@@ -1,13 +1,15 @@
 define([
   'intern!object',
   'intern/chai!assert',
+  'require',
   'intern/order!libs/jquery',
   'intern/order!libs/jquery-ui',
+  'intern/order!libs/element-resize-detector',
   'intern/order!todo/mdiv'
-], function (registerSuite, assert) {
-  var elClassName = 'mdiv',
-      containerClassName = 'mdiv-container',
-      mongolClassName = 'mongol';  
+], function (registerSuite, assert, require) {
+   var elClassName = 'mdiv',
+       containerClassName = 'mdiv-container',
+      mongolClassName = 'mongol';
 
   registerSuite({
     name: 'mongol div definition',
@@ -22,7 +24,7 @@ define([
 		name: 'mongol div in window',
 
     setup: function() {
-      element = $('<div class="mongol"></div>').mdiv();
+      element = $('<div class="mongol"></div>').mdiv(); 
     },
 
     'test mdiv class': function(){

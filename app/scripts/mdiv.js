@@ -1,4 +1,4 @@
-(function(window, $) {
+(function($) {
   $.widget('mongol.mdiv', {
     version: '@VERSION',
     _elClassName: 'mdiv',
@@ -8,7 +8,7 @@
     
     options: {
       _minheight: 350,
-      height: -1
+      width: -1
     },
 
     _create: function() {
@@ -26,9 +26,7 @@
      
       setContainer(self);
 
-      setContainerParent(self);
-      
-      setElementSize(self);
+      //setSize(self);
 
       setEvents(self);
     },
@@ -38,8 +36,8 @@
     _setOption: function(key, value) {
       var self = this,
           fnMap = {
-            height: function() {
-              setSelfHeight(value, self);
+            width: function() {
+              setWidth(self, value);
             }
           };
 
@@ -65,12 +63,7 @@
   }
 
   function setInnerHtml(self) {
-    var html = self.element.html();
-    self.element.empty();
-
-    $('<span class="mongolfont"></span')
-      .append(html)
-      .appendTo(self.element);
+    self.element.wrapInner('<span class="mongolfont"></span');
   }
 
   function rotateElement(self) {
@@ -102,10 +95,10 @@
     return false;
   }
 
-  function setElementSize(self) {
+  function setContainerHeight(self) {
     var innerwheight = self._containerParent.innerHeight();
 
-    if (!containerParentIsDiv(self)) {
+    if ($.isWindow(self._containerParent.get(0))) {
       innerwheight = innerwheight -
         parseInt($('body').css('margin-top'), 10) -
         parseInt($('body').css('margin-bottom'), 10);
@@ -115,18 +108,38 @@
       }
     }
 
+    self._container.outerHeight(innerwheight);
+    
     self._setOptions({
-      height: innerwheight
+      width: innerwheight
     });
   }
+
+  function setContainerWidth(self) {
+    self._container.innerWidth(self.element.outerWidth());
+  }
+
 
   function setContainer(self) {
     self.element.wrap('<div class="' + self._containerClassName + '"></div>');
     self._container = self.element.parent('div.' + self._containerClassName);
+
+    setContainerParent(self);
+
+    setContainerHeight(self);
+  }
+
+  function setHeight(self) {
+    self.element.css('width', self._container.innerWidth()); 
+  }
+
+  function setWidth(self) {
+    self.element.css('width', self._container.innerHeight());
+    setContainerWidth(self);
   }
 
   function setContainerParent(self) {
-    var parDiv = self._container.parents('div').first();
+    var parDiv = self._container.parent('div');
 
     if (parDiv.length) {
       self._containerParent = parDiv;
@@ -142,29 +155,25 @@
     }
     return false;
   }
-  
-  function setSelfHeight(height, self) {
-    self.element.outerWidth(height);
 
-    setContainerSize(self);
-  }
-
-  function setContainerSize(self) {
-    self._container.css('width', self.element.outerWidth());
-    self._container.css('height', self.element.outerHeight());
-  }
 
   function setEvents(self) {
-    $(window).resize(function() {
-      setElementSize(self);
-    });
+    if (containerParentIsDiv(self)) {
+
+    } else {
+      if ($.isWindow(self._containerParent.get(0))) {
+        self._containerParent.resize(function() {
+          setContainerHeight(self);
+        });
+
+      }
+    }
 
     $(window).on('load', function() {
-      setElementSize(self);
+      setContainerHeight(self);
     });
-
-    
   }
 
   // $('div.mongol').mdiv();
-})(window, jQuery);
+})(jQuery);
+

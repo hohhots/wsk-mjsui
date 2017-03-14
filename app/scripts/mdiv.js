@@ -19,15 +19,9 @@
       }
 
       setClass(self);
-
       setInnerHtml(self);
-
       rotateElement(self);
-     
       setContainer(self);
-
-      //setSize(self);
-
       setEvents(self);
     },
 
@@ -77,8 +71,6 @@
     // Only div can has class 'mongol'
     if (!el.is('div')) {
       console.error('Only div element can has \'mongol\' class.');
-
-      // not allowed
       return true;
     }
 
@@ -86,12 +78,9 @@
     if (el.find('.mongol, .' + self._elClassName).is('div') ||
         el.parents('.mongol, .' + self._elClassName).is('div')) {
       console.error('Don\'t nest DIVs with \'mongol\' class or \'' + self._elClassName + '\' class.');
-
-      // not allowed.
       return true;
     }
 
-    // mdiv allowed
     return false;
   }
 
@@ -129,9 +118,9 @@
     setContainerHeight(self);
   }
 
-  function setHeight(self) {
-    self.element.css('width', self._container.innerWidth()); 
-  }
+  // function setHeight(self) {
+  //  self.element.css('width', self._container.innerWidth()); 
+  //}
 
   function setWidth(self) {
     self.element.css('width', self._container.innerHeight());
@@ -156,22 +145,20 @@
     return false;
   }
 
-
   function setEvents(self) {
+    var callback = function () {
+      setContainerHeight(self);
+    };
+
     if (containerParentIsDiv(self)) {
 
-    } else {
-      if ($.isWindow(self._containerParent.get(0))) {
-        self._containerParent.resize(function() {
-          setContainerHeight(self);
-        });
-
-      }
     }
-
-    $(window).on('load', function() {
-      setContainerHeight(self);
-    });
+    
+    if ($.isWindow(self._containerParent.get(0))) {
+      self._containerParent.resize(callback);
+    }
+    
+    $(window).on('load', callback);
   }
 
   // $('div.mongol').mdiv();

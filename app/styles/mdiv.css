@@ -19,3 +19,8 @@
 .mongolfont {
     cursor: vertical-text;
 }
+
+.mimg-container {
+    display: inline-block;
+    cursor: auto;
+}

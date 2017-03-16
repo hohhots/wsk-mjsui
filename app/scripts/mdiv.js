@@ -3,6 +3,7 @@
     version: '@VERSION',
     _elClassName: 'mdiv',
     _containerClassName: 'mdiv-container',
+    _contentWrapper: null,
     _container: null,
     _containerParent: null,
     
@@ -19,10 +20,11 @@
       }
 
       setClass(self);
-      setInnerHtml(self);
+      setContentWrapper(self);
       rotateElement(self);
       setContainer(self);
       setEvents(self);
+      setContainerWidth(self);
     },
 
     _destroy: function() {},
@@ -56,8 +58,9 @@
     self.element.prop('class', cl);
   }
 
-  function setInnerHtml(self) {
-    self.element.wrapInner('<span class="mongolfont"></span');
+  function setContentWrapper(self) {
+    self.element.wrapInner($('<span class="mongolfont"></span'));
+    self._contentWrapper = self.element.children();
   }
 
   function rotateElement(self) {
@@ -147,7 +150,9 @@
 
   function setEvents(self) {
     var callback = function () {
+      setChildrens(self);
       setContainerHeight(self);
+      
     };
 
     if (containerParentIsDiv(self)) {
@@ -159,6 +164,22 @@
     }
     
     $(window).on('load', callback);
+  }
+
+  function setChildrens(self) {
+    var childrens = self._contentWrapper.children();
+    
+    childrens.each(function(id){
+      var that = $(this);
+      var tn = that.prop('tagName').toLowerCase(); 
+
+      switch (tn) {
+      case 'img':
+        that.mimg();
+        //break;
+      }
+
+    });
   }
 
   // $('div.mongol').mdiv();

@@ -1,0 +1,225 @@
+#+STARTIP: overview
+
+* interface tweaks
+#+BEGIN_SRC emacs-lisp
+(setq-default indent-tabs-mode nil) ;disable tab character
+(setq-default tab-width 2) ;set all buffer indent width to 2
+(setq js-indent-level 2) ;javascript tab indent width set to 2
+
+(setq inhibit-startup-message t)
+
+(tool-bar-mode -1)
+
+(fset 'yes-or-no-p 'y-or-n-p)
+
+(global-set-key (kbd "<f5>") 'revert-buffer)
+
+(desktop-save-mode 1)
+#+END_SRC
+  
+* try
+#+BEGIN_SRC emacs-lisp
+(use-package try
+     :ensure t)
+#+END_SRC
+  
+* which key
+  Brings up some help
+  #+BEGIN_SRC emacs-lisp
+  (use-package which-key
+      :ensure t
+      :config (which-key-mode))
+  #+END_SRC
+  
+* ido mode
+  #+BEGIN_SRC emacs-lisp
+    (setq indo-enable-flex-matching t)
+    (setq ido-everywhere t)
+    (ido-mode 1)
+
+    (defalias 'list-buffers 'ibuffer)
+  #+END_SRC
+* org mode stuff
+   #+BEGIN_SRC emacs-lisp
+     (use-package org-bullets
+       :ensure t
+       :config 
+       (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+   #+END_SRC
+* Ace windows for easy window switching
+   #+BEGIN_SRC emacs-lisp
+     (use-package ace-window
+       :ensure t
+       :init
+       (global-set-key [remap other-window] 'ace-window)
+       (custom-set-faces
+        '(aw-leading-char-face
+          ((t (:inherit ace-jump-face-foreground :height 3.0)))))
+       )
+   #+END_SRC
+* Swiper / Ivy / Counsel
+  #+BEGIN_SRC emacs-lisp
+    (use-package counsel
+      :bind
+      (("M-y" . counsel-yank-pop)
+      :map ivy-minibuffer-map
+      ("M-y" . ivy-next-line)))
+
+
+
+    (use-package ivy
+      :ensure t
+      :diminish (ivy-mode)
+      :bind (("C-x b" . ivy-switch-buffer))
+      :config
+      (ivy-mode 1)
+      (setq ivy-use-virtual-buffers t)
+      (setq ivy-display-style 'fancy))
+
+    (use-package swiper
+      :ensure t
+      :bind(("C-s" . swiper)
+            ("C-r" . swiper)
+            ("C-c C-r" . ivy-resume)
+            ("M-x" . counsel-M-x)
+            ("C-x C-f" . counsel-find-file))
+      :config
+      (ivy-mode 1)
+      (setq ivy-use-virtual-buffers t)
+      (setq ivy-display-style 'fancy)
+      (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+      )
+  #+END_SRC
+* Avy - navigate by searching for a letter on the screen and jumping to it
+  #+BEGIN_SRC emacs-lisp
+    (use-package avy
+    :ensure t
+    :bind ("M-s" . avy-goto-char))
+  #+END_SRC
+* Autocomplete
+  #+BEGIN_SRC emacs-lisp
+    (use-package auto-complete
+    :ensure t
+    :init
+    (ac-config-default)
+    (global-auto-complete-mode t)
+    )
+  #+END_SRC
+* Themes
+  #+BEGIN_SRC emacs-lisp
+    (use-package color-theme
+      :ensure t) 
+
+    (load-theme 'misterioso t)
+  #+END_SRC
+
+* Flycheck
+  #+BEGIN_SRC emacs-lisp
+    (use-package flycheck
+      :ensure t
+      :init
+      (global-flycheck-mode t))
+  #+END_SRC
+* Yasnippet
+  #+BEGIN_SRC emacs-lisp
+    (use-package yasnippet
+      :ensure t
+      :init
+      (yas-global-mode 1))
+  #+END_SRC
+* Web Mode 
+#+BEGIN_SRC emacs-lisp
+  (use-package web-mode
+    :ensure t
+    :config
+        (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+        (setq web-mode-engines-alist
+            '(("django" . "\\.html\\'")))
+        (setq web-mode-ac-sources-alist
+            '(("css" . (ac-source-css-property))
+              ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+(setq web-mode-enable-auto-closing t))
+#+END_SRC
+
+* Undo Tree
+  #+BEGIN_SRC emacs-lisp
+    (use-package undo-tree
+      :ensure t
+      :init
+      (global-undo-tree-mode))
+  #+END_SRC
+* Misc feature
+#+BEGIN_SRC emacs-lisp
+  (global-hl-line-mode t)
+
+  (use-package beacon
+    :ensure t
+    :config
+    (beacon-mode 1)
+      ;(setq beacon-color "#666600"))
+    )
+
+  (use-package hungry-delete
+    :ensure t
+    :config
+    (global-hungry-delete-mode))
+
+  (use-package aggressive-indent
+    :ensure t
+    :config
+    (global-aggressive-indent-mode 1))
+
+  (use-package expand-region
+    :ensure t
+    :config
+    (global-set-key (kbd "C-=") 'er/expand-region))
+
+  (use-package highlight-indent-guides
+    :ensure t
+    :config
+    (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+    (setq highlight-indent-guides-method 'character))
+
+  (setq save-interprogram-paste-before-kill t)  
+
+  (global-auto-revert-mode 1)
+  (setq auto-revert-verbose nil)
+  (global-set-key (kbd "<f5>") 'revert-buffer)
+
+#+END_SRC
+
+* iedit and narrow / widen dwin
+#+BEGIN_SRC emacs-lisp
+  (use-package iedit
+    :ensure t)
+
+  (defun narrow-or-widen-dwim (p) 
+    "Widen if buffer is narrowed, narrow-dwim otherwise.
+  Dwim means: region, org-src-block, org-subtree, or
+  defun, whichever applies first. Narrowing to
+  org-src-block actually calls `org-edit-src-code'.
+
+   With prefix P, don't widen, just narrow even if buffer
+  is already narrowed."
+    (interactive "P")
+    (declare (interactive-only))
+    (cond ((and (buffer-narrowed-p) (not p)) (widen))
+          ((region-active-p)
+           (narrow-to-region (region-beginning) (region-end)))
+          ((derived-mode-p 'org-mode)
+           ;; `org-edit-src-code' is not a real narrowing
+           ;; command. Remove this first conditional if
+           ;; you don't want it.
+           (cond ((ignore-errors (org-edit-src-code))
+                  (delete-other-windows))
+                  ((org-at-block-p)
+                  (org-narrow-to-block))
+                  (t (org-narrow-to-subtree))))
+                  (t (narrow-to-defun))))
+
+    ;; This line actually replaces Emacs' entire narrowing
+  ;; keymap, that's how much I like this command. Only
+  ;; copy it if that's what you want.
+  (define-key ctl-x-map "n" #'narrow-or-widen-dwim)
+
+#+END_SRC

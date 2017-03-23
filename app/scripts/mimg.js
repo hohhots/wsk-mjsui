@@ -5,11 +5,32 @@
     _create: function () {
       var self = this;
 
+      if (checkMongolImage(self)) {
+        return;
+      }
+
       rotateElement(self);
       setContainer(self);
     }
   });
 
+  function checkMongolImage(self) {
+    var el = self.element;
+    // Only div can has class 'mongol'
+    if (!el.is('img')) {
+      console.error('Only image element can converted to mongol image.');
+      return true;
+    }
+
+    // Only images in mongol div can converted to mongol image.
+    if (el.parents('span.mongolfont').length === 0) {
+      console.error('Only images in mongol div can converted to mongol image.');
+      return true;
+    }
+
+    return false;
+  }
+  
   function rotateElement(self) {
     self.element.css('transform-origin', 'left top');
     self.element.css('transform', 'rotate(-90deg) rotateY(180deg)');

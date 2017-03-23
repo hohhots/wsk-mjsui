@@ -24,6 +24,7 @@
       rotateElement(self);
       setContainer(self);
       setEvents(self);
+      setChildrens(self);
       setContainerWidth(self);
     },
 
@@ -150,9 +151,7 @@
 
   function setEvents(self) {
     var callback = function () {
-      setChildrens(self);
       setContainerHeight(self);
-      
     };
 
     if (containerParentIsDiv(self)) {
@@ -168,7 +167,7 @@
 
   function setChildrens(self) {
     var childrens = self._contentWrapper.children();
-    
+
     childrens.each(function(id){
       var that = $(this);
       var tn = that.prop('tagName').toLowerCase(); 
